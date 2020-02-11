@@ -28,42 +28,28 @@ namespace EmployeeManagement
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseRouting();
+            // Opciones de los archivos por defecto
+            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Clear();
+            defaultFilesOptions.DefaultFileNames.Add("foo.html");
 
+            // Se utiliza para trabajar con archivos por defecto
+            // default.htm, default.html, index.htm, index.html
+            app.UseDefaultFiles(defaultFilesOptions);    
+            
+            // Se utiliza para trabajar con archivos estaticos por defecto en ./wwwroot
             app.UseStaticFiles();
-
-
-            app.Use(async (context, next) =>
-            {
-                //await context.Response.WriteAsync("Primer middleware");
-
-                logger.LogInformation("MW1: Incoming Request");
-                await next();
-                logger.LogInformation("MW1: Outgoing Request");
-            });
-
-
-            app.Use(async (context, next) =>
-            {
-                //await context.Response.WriteAsync("Primer middleware");
-
-                logger.LogInformation("MW2: Incoming Request");
-                await next();
-                logger.LogInformation("MW2: Outgoing Request");
-            });
-
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("MW3: middleware");
-                logger.LogInformation("MW3: Request handle and respose produced");
+                await context.Response.WriteAsync("Hello world..!");               
             });
         }
     }
