@@ -36,16 +36,11 @@ namespace EmployeeManagement
             }
 
             // Opciones de los archivos por defecto
-            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
-            defaultFilesOptions.DefaultFileNames.Clear();
-            defaultFilesOptions.DefaultFileNames.Add("foo.html");
+            FileServerOptions fileServerOptions = new FileServerOptions();
+            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
+            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
 
-            // Se utiliza para trabajar con archivos por defecto
-            // default.htm, default.html, index.htm, index.html
-            app.UseDefaultFiles(defaultFilesOptions);    
-            
-            // Se utiliza para trabajar con archivos estaticos por defecto en ./wwwroot
-            app.UseStaticFiles();
+            app.UseFileServer(fileServerOptions);
 
             app.Run(async (context) =>
             {
