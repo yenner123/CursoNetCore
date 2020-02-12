@@ -32,7 +32,11 @@ namespace EmployeeManagement
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions
+                {
+                    SourceCodeLineCount = 10
+                };
+                app.UseDeveloperExceptionPage(developerExceptionPageOptions);
             }
 
             // Opciones de los archivos por defecto
@@ -44,7 +48,8 @@ namespace EmployeeManagement
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello world..!");               
+                throw new Exception("Esto es una excepción");
+                await context.Response.WriteAsync("Hello world..!");
             });
         }
     }
