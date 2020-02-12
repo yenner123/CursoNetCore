@@ -32,24 +32,20 @@ namespace EmployeeManagement
         {
             if (env.IsDevelopment())
             {
-                DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions
-                {
-                    SourceCodeLineCount = 10
-                };
-                app.UseDeveloperExceptionPage(developerExceptionPageOptions);
+                app.UseDeveloperExceptionPage();
             }
 
-            // Opciones de los archivos por defecto
-            FileServerOptions fileServerOptions = new FileServerOptions();
-            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
-            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
 
-            app.UseFileServer(fileServerOptions);
+            if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("PreProduction"))
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            app.UseStaticFiles();
 
             app.Run(async (context) =>
-            {
-                throw new Exception("Esto es una excepción");
-                await context.Response.WriteAsync("Hello world..!");
+            {                
+                await context.Response.WriteAsync("Environment: " + env.EnvironmentName);
             });
         }
     }
