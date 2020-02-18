@@ -25,6 +25,9 @@ namespace EmployeeManagement
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Añade Mvc al container
+            //services.AddMvc(); Old
+            services.AddRazorPages(); // New
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,19 +37,17 @@ namespace EmployeeManagement
             {
                 app.UseDeveloperExceptionPage();
             }
-
-
-            if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("PreProduction"))
-            {
-                app.UseExceptionHandler("/Error");
-            }
-
+           
             app.UseStaticFiles();
 
-            app.Run(async (context) =>
-            {                
-                await context.Response.WriteAsync("Environment: " + env.EnvironmentName);
-            });
+            // añade el middleware para realizar routing
+            app.UseRouting();
+
+            // añade el middleware para usar EndPoint
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+            });        
         }
     }
 }
